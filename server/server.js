@@ -24,7 +24,7 @@ app.post("/qa/questions", controller.questions.post);
 
 app.put("/qa/answers/:answer_id/helpful", controller.answers.helpful);
 
-// app.put("/qa/answers/:answer_id/report", controller.answers.report);
+app.put("/qa/answers/:answer_id/report", controller.answers.report);
 
 module.exports = app;
 

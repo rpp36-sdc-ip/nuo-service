@@ -30,18 +30,32 @@ module.exports = {
       } catch {
         res.status(500);
       }
+    },
+
+    helpful: function(req, res) {
+      try {
+        var question_id = req.params.question_id;
+        models.questions.helpful(question_id, function() {
+          res.status(204).end();
+        })
+      } catch {
+        res.status(500).send(err);
+      }
+    },
+
+    report: function(req, res) {
+      try {
+        var question_id = req.params.question_id;
+        models.questions.report(question_id, function() {
+          res.status(204).end();
+        })
+      } catch {
+        res.status(500).send(err);
+      }
     }
   },
 
   answers: {
-    // post: function(req, res) {
-    //   try {
-
-    //   } catch {
-    //     res.status(500).send(err);
-    //   }
-    // },
-
     helpful: function(req, res) {
       try {
         var answer_id = req.params.answer_id;
@@ -49,7 +63,18 @@ module.exports = {
           res.status(204).end();
         })
       } catch {
-        res.status(500).send(err)
+        res.status(500).send(err);
+      }
+    },
+
+    report: function(req, res) {
+      try {
+        var answer_id = req.params.answer_id;
+        models.answers.report(answer_id, function() {
+          res.status(204).end();
+        })
+      } catch {
+        res.status(500).send(err);
       }
     }
 
