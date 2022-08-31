@@ -106,6 +106,18 @@ module.exports = {
         //loop each question, find all answer, append to the question_Id
         cb(questions);
       });
+    },
+
+    post: function(product_id, body, name, email, cb) {
+      const queryString = `INSERT INTO questions (product_id, question_body, asker_name, asker_email, question_date)
+      VALUES ($1, $2, $3, $4, NOW());`
+      const values = [product_id, body, name, email];
+      pool.query(queryString, values, function(err, result) {
+        if (err) {
+          throw err;
+        }
+        cb();
+      })
     }
   },
 
@@ -120,7 +132,25 @@ module.exports = {
         }
         cb(result);
       });
-    }
+    },
 
+    post: function() {
+
+    },
+
+    helpful: function(answer_id, cb) {
+      const queryString = `UPDATE answers SET helpfulness = helpfulness + 1 WHERE id = $1`;
+      const values = [answer_id];
+      pool.query(queryString, values, function(err, result) {
+        if (err) {
+          throw err;
+        }
+        cb();
+      })
+    },
+
+    report: function() {
+
+    }
   }
 };
