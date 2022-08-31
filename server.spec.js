@@ -52,3 +52,13 @@ describe("Test the PUT /qa/answers/:answer_id/helpful", () => {
   })
 })
 
+describe("Test the PUT /qa/answers/:answer_id/report", () => {
+
+  it('PUT /qa/answers/6797506/report should response with status code 204', async() => {
+    const res = await request(app)
+      .put('/qa/answers/6797506/report')
+      expect(res.status).toEqual(204);
+      //expect(res._data.body).toEqual('Test Question for product id 71698');
+  })
+})
+
