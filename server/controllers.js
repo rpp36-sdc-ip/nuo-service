@@ -76,6 +76,27 @@ module.exports = {
       } catch {
         res.status(500).send(err);
       }
+    },
+
+    post: function(req, res) {
+      try {
+        var question_id = req.params.question_id;
+        var body = req.body.body;
+        var name = req.body.name;
+        var email = req.body.email;
+        var photos = req.body.photos;
+        models.answers.post(question_id, body, name, email, function(result) {
+          const answer_id = result.rows[0].id;
+          if (photos.length >= 1) {
+            models.photos.post(answer_id, photos[0], function(result) {
+              res.status(201).end();
+            });
+          }
+        });
+        res.status(201).end();
+      } catch {
+        res.status(500).send(err);
+      }
     }
 
   }

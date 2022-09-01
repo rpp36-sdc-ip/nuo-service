@@ -118,6 +118,28 @@ module.exports = {
         }
         cb();
       })
+    },
+
+    report: function(question_id, cb) {
+      const queryString = `UPDATE answers SET reported = true WHERE id = $1`;
+      const values = [question_id];
+      pool.query(queryString, values, function(err, result) {
+        if (err) {
+          throw err;
+        }
+        cb();
+      })
+    },
+
+    helpful: function(question_id, cb) {
+      const queryString = `UPDATE answers SET helpfulness = helpfulness + 1 WHERE id = $1`;
+      const values = [question_id];
+      pool.query(queryString, values, function(err, result) {
+        if (err) {
+          throw err;
+        }
+        cb();
+      })
     }
   },
 
@@ -134,8 +156,16 @@ module.exports = {
       });
     },
 
-    post: function() {
-
+    post: function(question_id, body, name, email, cb) {
+      const queryString = `INSERT INTO answers (question_id, body, answerer_name, answerer_email, answer_date)
+      VALUES ($1, $2, $3, $4, NOW()) RETURNING id; `;
+      const values = [question_id, body, name, email];
+      pool.query(queryString, values, function(err, result) {
+        if (err) {
+          throw err;
+        }
+        cb(result);
+      })
     },
 
     helpful: function(answer_id, cb) {
@@ -149,8 +179,28 @@ module.exports = {
       })
     },
 
-    report: function() {
-
+    report: function(answer_id, cb) {
+      const queryString = `UPDATE answers SET reported = true WHERE id = $1`;
+      const values = [answer_id];
+      pool.query(queryString, values, function(err, result) {
+        if (err) {
+          throw err;
+        }
+        cb();
+      })
     }
-  }
+  },
+
+  photos: {
+    post: function(answer_id, photo_url, cb) {
+      const queryString = `INSERT INTO photos(answer_id, photo_url) VALUES ($1, $2);`;
+      const values = [answer_id, photo_url];
+      pool.query(queryString, values, function(err, res) {
+        if (err) {
+          throw err;
+        }
+        cb();
+      })
+    }
+  },
 };

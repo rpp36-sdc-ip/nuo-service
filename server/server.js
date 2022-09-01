@@ -16,11 +16,11 @@ app.get("/qa/questions", controller.questions.get);
 
 app.post("/qa/questions", controller.questions.post);
 
-// app.post("/qa/questions/:question_id/answers", controller.answers.post);
+app.post("/qa/questions/:question_id/answers", controller.answers.post);
 
-// app.put("/qa/questions/:question_id/helpful", controller.questions.helpful);
+app.put("/qa/questions/:question_id/helpful", controller.questions.helpful);
 
-// app.put("/qa/questions/:question_id/report", controller.questions.report);
+app.put("/qa/questions/:question_id/report", controller.questions.report);
 
 app.put("/qa/answers/:answer_id/helpful", controller.answers.helpful);
 

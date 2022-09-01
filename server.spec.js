@@ -62,3 +62,23 @@ describe("Test the PUT /qa/answers/:answer_id/report", () => {
   })
 })
 
+
+describe("Test the POST /qa/questions/3477292/answers", () => {
+  var fakeData = {
+    body: 'test for question id ',
+    name: 'john doe doe',
+    email: 'jd@gmail.com',
+    photos: ['testing.url'],
+  }
+  // afterEach(async () => {
+  //   await pool.query(`DELETE FROM questions WHERE asker_name = '${fakeData.name}'`);
+  // });
+
+  it('POST /qa/questions/3477292/answers should response with status code 201', async() => {
+    const res = await request(app)
+      .post('/qa/questions/3477292/answers')
+      .send(fakeData);
+      expect(res.status).toEqual(201);
+      //expect(res._data.body).toEqual('Test Question for product id 71698');
+  })
+})
