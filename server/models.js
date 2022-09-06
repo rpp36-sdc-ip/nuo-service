@@ -45,7 +45,7 @@ module.exports = {
     get:  function (product_id, count, page, cb) {
       const queryString = `
       SELECT questions.question_id, question_body, question_date, asker_name, question_helpfulness, questions.reported, asker_email,
-      body,answer_date,answerer_name,helpfulness,answers.id AS answer_id, answerer_email
+      body,answer_date,answerer_name,helpfulness,answers.id AS answer_id, answerer_email,
       photo_url
       FROM questions
       LEFT JOIN answers on questions.question_id = answers.question_id
@@ -80,27 +80,35 @@ module.exports = {
           var que = {};
           que['question_id'] = qs[0].question_id;
           que['question_body'] = qs[0].question_body;
-          que["question_date"] = qs[0].question_date;
+          que["question_date"] = qs[0].question_date.toISOString();
           que["asker_name"] = qs[0].asker_name;
           que["question_helpfulness"] = qs[0].question_helpfulness;
           que["reported"] = qs[0].reported;
           que["asker_email"] = qs[0].asker_email;
-
 
           var answers = {};
           for (var i = 0; i < qs.length; i++) {
             var answer = {};
             answer['id'] = qs[i].answer_id;
             answer['body'] = qs[i].body;
-            answer['answer_date'] = qs[i].answer_date;
+            if (qs[i].answer_date != null) {
+              answer['date'] = qs[i].answer_date.toISOString();
+            } else {
+              answer['date'] = qs[i].answer_date
+            }
             answer['answerer_name'] = qs[i].answerer_name;
-            answer['helpfullness'] = qs[i].helpfullness;
-            answer['photos'] = [qs[i].photo_url];
+            answer['helpfulness'] = qs[i].helpfulness;
+            if (qs[i].photo_url) {
+              answer['photos'] = [qs[i].photo_url];
+            } else {
+              answer['photos'] = [''];
+            }
             answers[qs[i].answer_id] = answer;
           }
           que["answers"] = answers;
           questions['results'].push(que);
         }
+
         // questions["answers"] = answers;
         // console.log('testing',questions)
         //loop each question, find all answer, append to the question_Id
@@ -121,7 +129,7 @@ module.exports = {
     },
 
     report: function(question_id, cb) {
-      const queryString = `UPDATE answers SET reported = true WHERE id = $1`;
+      const queryString = `UPDATE questions SET reported = true WHERE question_id = $1`;
       const values = [question_id];
       pool.query(queryString, values, function(err, result) {
         if (err) {
@@ -132,7 +140,7 @@ module.exports = {
     },
 
     helpful: function(question_id, cb) {
-      const queryString = `UPDATE answers SET helpfulness = helpfulness + 1 WHERE id = $1`;
+      const queryString = `UPDATE questions SET question_helpfulness = question_helpfulness + 1 WHERE question_id = $1`;
       const values = [question_id];
       pool.query(queryString, values, function(err, result) {
         if (err) {

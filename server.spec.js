@@ -18,6 +18,7 @@ describe("Test the root path", () => {
     const res = await request(app)
       .get('/qa/questions?product_id=71698')
       expect(res.body.results.length).toEqual(4);
+      console.log(res.body.results[0].answers)
   });
 });
 
