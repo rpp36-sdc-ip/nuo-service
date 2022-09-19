@@ -1,12 +1,15 @@
-var Pool = require('pg-pool')
+const {Pool} = require('pg')
+require('dotenv').config()
 
-const config = {
-  host: 'localhost',
-  port: 5432,
-  database: 'SDC'
-};
+const pool = new Pool({
+  host: process.env.HOST,
+  // port: process.env.PORT,
+  database: process.env.DATABASE,
+  user: process.env.USERNAME,
+  password: process.env.PASSWORD
+})
 
-var pool = new Pool(config);
+pool.connect();
 
 // pool.on('connect', (client) => {
 //   console.log('Connected to DB')
